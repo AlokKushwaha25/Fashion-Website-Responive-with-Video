@@ -262,6 +262,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
         <script src="script.js"></script>
+
+        <!-- NEW: Data Layer Push for 'view_item' -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const proDetails = document.getElementById('prodetails');
+                dataLayer.push({
+                    event: 'view_item',
+                    ecommerce: {
+                        currency: 'USD',
+                        value: parseFloat(proDetails.dataset.price),
+                        items: [{
+                            item_id: proDetails.dataset.id,
+                            item_name: proDetails.dataset.name,
+                            price: parseFloat(proDetails.dataset.price)
+                        }]
+                    }
+                });
+            });
+        </script>
+        <!-- End of New Code -->
+
     </body>
 
 </html>

@@ -108,6 +108,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div id="cart-overlay" class="cart-overlay"></div>
 
     <script src="script.js"></script>
+
+    <!-- NEW: Data Layer Push for 'add_payment_info' -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const paymentForm = document.getElementById('checkout-form');
+            if (paymentForm) {
+                // We'll push the event when the user starts typing in the form.
+                paymentForm.addEventListener('input', () => {
+                    // This static push is for demonstration. In a real-world scenario,
+                    // you might trigger this based on a specific field's completion
+                    // or another user interaction that signifies intent.
+                    dataLayer.push({
+                        event: 'add_payment_info',
+                        ecommerce: {
+                            currency: 'USD',
+                            value: parseFloat(document.getElementById('summary-total-price').textContent.replace('$', '')),
+                            payment_type: 'Credit Card' // Example static value
+                        }
+                    });
+                }, { once: true }); // Use { once: true } so it only fires a single time
+            }
+        });
+    </script>
+    <!-- End of New Code -->
+
 </body>
 
 </html>
