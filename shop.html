@@ -379,6 +379,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- End of New Code -->
     
         <script src="script.js"></script>
+
+        <!-- NEW: Data Layer Push for 'view_item_list' -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const productElements = document.querySelectorAll('.pro');
+                const items = Array.from(productElements).map((pro, index) => ({
+                    item_id: pro.dataset.id,
+                    item_name: pro.dataset.name,
+                    price: parseFloat(pro.dataset.price),
+                    item_list_name: 'Shop Page Products',
+                    item_list_id: 'shop_page_list_01',
+                    index: index + 1
+                }));
+
+                dataLayer.push({
+                    event: 'view_item_list',
+                    ecommerce: {
+                        item_list_name: 'Shop Page Products',
+                        item_list_id: 'shop_page_list_01',
+                        items: items
+                    }
+                });
+            });
+        </script>
+        <!-- End of New Code -->
+
     </body>
 
 </html>

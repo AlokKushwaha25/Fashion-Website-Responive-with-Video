@@ -64,6 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
         dataLayer.push({
             event: 'add_to_cart',
             ecommerce: {
+                currency: 'USD',
+                value: product.price * (product.quantity || 1),
                 items: [{
                     item_id: product.id,
                     item_name: product.name,
@@ -115,6 +117,8 @@ document.addEventListener('DOMContentLoaded', () => {
             dataLayer.push({
                 event: 'remove_from_cart',
                 ecommerce: {
+                    currency: 'USD',
+                    value: removedItem.price * removedItem.quantity,
                     items: [{
                         item_id: removedItem.id,
                         item_name: removedItem.name,
@@ -322,25 +326,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Simulate a transaction ID
                 const transactionId = 'tx_' + new Date().getTime() + Math.random().toString(36).substring(2, 9);
-
-                // Data Layer Push for 'purchase' event
-                dataLayer.push({
-                    event: 'purchase',
-                    ecommerce: {
-                        transaction_id: transactionId,
-                        value: calculateTotal(),
-                        currency: 'USD',
-                        items: cart.map(item => ({
-                            item_id: item.id,
-                            item_name: item.name,
-                            price: item.price,
-                            quantity: item.quantity
-                        }))
-                    }
-                });
-
-                // Clear the cart
-                clearCart();
 
                 // Redirect to a thank you page
                 window.location.href = `thankyou.html?tid=${transactionId}`;

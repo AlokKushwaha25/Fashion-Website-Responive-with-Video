@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -11,41 +12,92 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You! - Tech2etc Ecommerce</title>
+    <title>Thank You - Tech2etc Ecommerce</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
     <link rel="stylesheet" href="style.css">
-     <script>
+    <script>
         // Initialize the data layer for Google Tag Manager
         window.dataLayer = window.dataLayer || [];
     </script>
 </head>
+
 <body>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T5J8Z78D"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-
-    <div class="thank-you-container">
-        <div class="thank-you-content">
-            <div class="success-animation">
-                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
-                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                </svg>
-            </div>
-            <h1>Thank You For Your Order!</h1>
-            <p>Your payment was successful and your order is being processed.</p>
-            <p>Transaction ID: <strong id="transaction-id"></strong></p>
-            <a href="index.html" class="normal">Continue Shopping</a>
+    <section id="header">
+        <a href="#"><img src="img/logo.png" class="logo"></a>
+        <div>
+            <ul id="navbar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li id="lg-bag"><a href="cart.html"><i class="far fa-shopping-bag"></i></a></li>
+                <a href="#" id="close"><i class="far fa-times"></i></a>
+            </ul>
         </div>
-    </div>
-    
+        <div id="mobile">
+            <a href="cart.html"><i class="far fa-shopping-bag"></i></a>
+            <i id="bar" class="fas fa-outdent"></i>
+        </div>
+    </section>
+
+    <section id="thank-you" class="section-p1">
+        <div class="thank-you-container">
+            <h1>Thank You for Your Order!</h1>
+            <p>Your purchase has been successfully completed.</p>
+            <p>Your Transaction ID is: <strong id="transaction-id"></strong></p>
+            <a href="shop.html" class="normal">Continue Shopping</a>
+        </div>
+    </section>
+
+    <footer class="section-p1">
+        <!-- Footer content from your other pages -->
+    </footer>
+
+    <script src="script.js"></script>
+
+    <!-- NEW: Data Layer Push for 'purchase' -->
     <script>
-        // Display the transaction ID from URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const transactionId = urlParams.get('tid');
-        if (transactionId) {
-            document.getElementById('transaction-id').textContent = transactionId;
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const transactionId = urlParams.get('tid');
+            const transactionIdEl = document.getElementById('transaction-id');
+
+            if (transactionIdEl && transactionId) {
+                transactionIdEl.textContent = transactionId;
+            }
+
+            // Retrieve the cart from localStorage one last time for the purchase event
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const total = cart.reduce((t, item) => t + item.price * item.quantity, 0);
+
+            if (cart.length > 0) {
+                dataLayer.push({
+                    event: 'purchase',
+                    ecommerce: {
+                        transaction_id: transactionId,
+                        value: total,
+                        currency: 'USD',
+                        items: cart.map(item => ({
+                            item_id: item.id,
+                            item_name: item.name,
+                            price: item.price,
+                            quantity: item.quantity
+                        }))
+                    }
+                });
+
+                // Clear the cart from localStorage after the purchase
+                localStorage.removeItem('cart');
+            }
+        });
     </script>
+    <!-- End of New Code -->
+
 </body>
+
 </html>
